@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        GMSServices.provideAPIKey(Constants.GOOGLE_MAPS_API_KEY)
+        checkIfFirstLaunch()
+        
         return true
     }
 
@@ -42,6 +46,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
+    }
+    
+    func checkIfFirstLaunch() {
+        if !UserDefaults.standard.bool(forKey: Constants.UserDefaults.USER_DEFAULT_LAUNCHED_BEFORE) {
+            UserDefaults.standard.set(true, forKey: Constants.UserDefaults.USER_DEFAULT_LAUNCHED_BEFORE)
+            UserDefaults.standard.set(Constants.UserDefaults.STANDARD_ZOOM_LEVEL, forKey: Constants.UserDefaults.USER_DEFAULT_ZOOM_LEVEL)
+            UserDefaults.standard.set(Constants.UserDefaults.STANDARD_LONGITUDE, forKey: Constants.UserDefaults.USER_DEFAULT_MAP_LONGITUDE)
+            UserDefaults.standard.set(Constants.UserDefaults.STANDARD_LATITUDE, forKey: Constants.UserDefaults.USER_DEFAULT_MAP_LATITUDE)
+        }
     }
 
     // MARK: - Core Data stack
