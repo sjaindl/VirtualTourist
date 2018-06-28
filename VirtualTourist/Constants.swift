@@ -10,6 +10,14 @@ import Foundation
 
 struct Constants {
     static let GOOGLE_MAPS_API_KEY = "AIzaSyBHKiv3bi0757Tw2yKVY6fm3F5oNDXqzKc"
+    static let FLICKR_KEY = "c9044642523990c5adbde35ae6cfd0e5"
+    
+    static let ALBUM_CELL_REUSE_ID = "photoCell"
+    static let ALBUM_SEGUE_ID = "showAlbum"
+    
+    static let PHOTO_LIMIT = 18
+    
+//    static let PIN_ID = "pinId"
     
     struct UserDefaults {
         static let USER_DEFAULT_LAUNCHED_BEFORE = "hasLaunchedBefore"
