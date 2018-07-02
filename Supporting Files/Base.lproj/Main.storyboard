@@ -46,7 +46,7 @@
         <scene sceneID="5xS-7C-6Vk">
             <objects>
                 <viewController id="W4q-mF-6aD" customClass="AlbumViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="mpI-P7-S08" customClass="View">
+                    <view key="view" contentMode="scaleToFill" id="mpI-P7-S08">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -67,14 +67,14 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="photoCell" id="UzV-Xp-yQs" customClass="AlbumCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="UzV-Xp-yQs" customClass="AlbumCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="138" height="111"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="138" height="111"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AppIcon-60-2" translatesAutoresizingMaskIntoConstraints="NO" id="dsd-3r-ioD">
+                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pin" translatesAutoresizingMaskIntoConstraints="NO" id="dsd-3r-ioD">
                                                     <rect key="frame" x="38.5" y="25.5" width="60" height="60"/>
                                                 </imageView>
                                             </subviews>
@@ -96,6 +96,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3jZ-Ay-qs3">
                                 <rect key="frame" x="0.0" y="637" width="375" height="30"/>
                                 <state key="normal" title="New Collection"/>
+                                <connections>
+                                    <action selector="fetchNewCollection:" destination="W4q-mF-6aD" eventType="touchUpInside" id="3ql-Rj-0xq"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -117,6 +120,7 @@
                         <outlet property="collectionView" destination="jmY-Z5-gC5" id="QfW-eh-LJb"/>
                         <outlet property="flowLayout" destination="jdt-g2-BwF" id="w1N-pn-XDK"/>
                         <outlet property="map" destination="NE5-yi-qhZ" id="oek-oL-jvc"/>
+                        <outlet property="newCollectionButton" destination="3jZ-Ay-qs3" id="wgL-dL-tDp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bg8-PH-yLO" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -143,6 +147,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="AppIcon-60-2" width="60" height="60"/>
+        <image name="pin" width="60" height="60"/>
     </resources>
 </document>

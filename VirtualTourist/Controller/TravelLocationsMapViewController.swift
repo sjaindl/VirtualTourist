@@ -22,7 +22,6 @@ class TravelLocationsMapViewController: UIViewController {
         super.viewDidLoad()
         
         map.delegate = self
-        // Do any additional setup after loading the view.
         
         initCamera()
         initResultsController()
@@ -31,9 +30,9 @@ class TravelLocationsMapViewController: UIViewController {
     
     func initResultsController() {
         let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: Constants.CoreData.SORT_KEY, ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pins")
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: Constants.CoreData.CACHE_NAME_PINS)
         fetchedResultsController.delegate = self
     }
     
@@ -51,11 +50,6 @@ class TravelLocationsMapViewController: UIViewController {
         } catch {
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Navigation
@@ -101,8 +95,6 @@ class TravelLocationsMapViewController: UIViewController {
     }
     
     func store(_ pin: Pin, in marker: GMSMarker) {
-//        var markerData = Dictionary<String, Any>()
-//        markerData[Constants.PIN_ID] = pin
         marker.userData = pin
     }
 }

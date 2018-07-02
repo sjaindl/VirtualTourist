@@ -15,7 +15,16 @@ struct Constants {
     static let ALBUM_CELL_REUSE_ID = "photoCell"
     static let ALBUM_SEGUE_ID = "showAlbum"
     
-    static let PHOTO_LIMIT = 18
+    struct CoreData {
+        static let PLACEHOLDER_IMAGE = "placeholder"
+        static let SORT_KEY = "creationDate"
+        static let CACHE_NAME_PINS = "pin"
+        static let CACHE_NAME_PHOTOS = "photos"
+        
+        static let PHOTO_LIMIT = 18
+    }
+    
+    
     
 //    static let PIN_ID = "pinId"
     
