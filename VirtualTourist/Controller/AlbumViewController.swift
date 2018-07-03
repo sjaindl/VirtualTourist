@@ -102,24 +102,26 @@ class AlbumViewController: UIViewController {
         
         self.noPhotoLabel.isHidden = true
         
-        do {
-            try dataSource.performFetch()
-            if let result = dataSource.fetchedObjects() {
-                if result.count == 0 {
-                    fetchDataFromFlickr()
-                }
-                else {
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                        self.enableUi(true)
+        DispatchQueue.global().async {
+            do {
+                try self.dataSource.performFetch()
+                if let result = self.dataSource.fetchedObjects() {
+                    if result.count == 0 {
+                        self.fetchDataFromFlickr()
+                    }
+                    else {
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                            self.enableUi(true)
+                        }
                     }
                 }
-                
+            } catch {
+                DispatchQueue.main.async {
+                    self.enableUi(true)
+                    self.showError("Could not fetch data \(error.localizedDescription)")
+                }
             }
-            
-        } catch {
-            enableUi(true)
-            showError("Could not fetch data \(error.localizedDescription)")
         }
     }
     
