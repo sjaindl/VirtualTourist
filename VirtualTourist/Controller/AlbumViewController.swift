@@ -19,13 +19,13 @@ class AlbumViewController: UIViewController {
     
     var pin: Pin!
     var dataController: DataController!
-    var fetchedResultsController: NSFetchedResultsController<Photos>!
+    var dataSource: GenericListDataSource<Photos, AlbumCollectionViewCell>!
     var itemsToDelete: [IndexPath] = []
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        fetchedResultsController = nil
+        dataSource.fetchedResultsController = nil
         itemsToDelete.removeAll()
     }
     
@@ -52,7 +52,7 @@ class AlbumViewController: UIViewController {
     }
     
     func deletePhotos() {
-        guard let fetchedObjects = fetchedResultsController.fetchedObjects else {
+        guard let fetchedObjects = dataSource.fetchedObjects() else {
             print("no fetched objects to delete!")
             return
         }
@@ -66,7 +66,6 @@ class AlbumViewController: UIViewController {
         navigationItem.rightBarButtonItem?.isEnabled = false
         
         resetAlpha()
-//        collectionView.reloadData()
     }
     
     func setupFlowLayout() {
@@ -92,17 +91,16 @@ class AlbumViewController: UIViewController {
         
         let predicate = NSPredicate(format: "pin == %@", pin!)
         fetchRequest.predicate = predicate
-        
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "\(Constants.CoreData.CACHE_NAME_PHOTOS)-\(pin.objectID)")
-        fetchedResultsController.delegate = self
+
+        dataSource = GenericListDataSource(collectionView: collectionView, managedObjectContext: dataController.viewContext, fetchRequest: fetchRequest, cellReuseId: Constants.ALBUM_CELL_REUSE_ID, cacheName: "\(Constants.CoreData.CACHE_NAME_PHOTOS)-\(pin.objectID)")
     }
     
     func fetchData() {
         enableUi(false)
         
         do {
-            try fetchedResultsController.performFetch()
-            if let result = fetchedResultsController.fetchedObjects {
+            try dataSource.performFetch()
+            if let result = dataSource.fetchedObjects() {
                 if result.count == 0 {
                     fetchDataFromFlickr()
                 }
@@ -195,7 +193,7 @@ class AlbumViewController: UIViewController {
         enableUi(false)
         
         for item in itemsToDelete {
-            let object = fetchedResultsController.object(at: item)
+            let object = dataSource.object(at: item)
             dataController.viewContext.delete(object)
             try? dataController.save()
         }
@@ -227,9 +225,7 @@ class AlbumViewController: UIViewController {
     }
     
     func resetAlpha() {
-        let count = fetchedResultsController.fetchedObjects?.count ?? 0
-        
-        for row in 0 ... count {
+        for row in 0 ... dataSource.count() {
             setAlphaValue(at: IndexPath(row: row, section: 0), to: 1.0)
         }
     }
@@ -241,53 +237,14 @@ class AlbumViewController: UIViewController {
     }
 }
 
-extension AlbumViewController: NSFetchedResultsControllerDelegate {
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
-        switch type {
-        case .insert:
-            if let newIndexPath = newIndexPath {
-                collectionView.insertItems(at: [newIndexPath])
-            }
-        case .delete:
-            if let indexPath = indexPath {
-                collectionView.deleteItems(at: [indexPath])
-            }
-        case .move:
-            if let indexPath = indexPath, let newIndexPath = newIndexPath {
-                collectionView.moveItem(at: indexPath, to: newIndexPath)
-            }
-            
-        case .update:
-            if let indexPath = indexPath {
-                collectionView.reloadItems(at: [indexPath])
-            }
-        }
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        let indexSet = IndexSet(integer: sectionIndex)
-        
-        switch type {
-        case .insert:
-            collectionView.insertSections(indexSet)
-        case .delete:
-            collectionView.deleteSections(indexSet)
-        case .update, .move:
-            print("Unsupported section action type")
-        }
-    }
-}
-
 extension AlbumViewController : UICollectionViewDelegate, UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return fetchedResultsController.sections?.count ?? 1
+        return dataSource.numberOfSections(in: collectionView)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
+        return dataSource.collectionView(collectionView, numberOfItemsInSection: section)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -295,12 +252,12 @@ extension AlbumViewController : UICollectionViewDelegate, UICollectionViewDataSo
         
         cell.locationImage.image = UIImage(named: Constants.CoreData.PLACEHOLDER_IMAGE)
         
-        if let imageData = fetchedResultsController.object(at: indexPath).imageData {
+        if let imageData = dataSource.object(at: indexPath).imageData {
             cell.locationImage.image = UIImage(data: imageData)
         } else {
             cell.locationImage.image = UIImage(named: Constants.CoreData.PLACEHOLDER_IMAGE)
 
-            if let imagePath = fetchedResultsController.object(at: indexPath).imageUrl, let imageUrl = URL(string: imagePath), let imageData = try? Data(contentsOf: imageUrl) {
+            if let imagePath = dataSource.object(at: indexPath).imageUrl, let imageUrl = URL(string: imagePath), let imageData = try? Data(contentsOf: imageUrl) {
 
                 DispatchQueue.main.async {
                     cell.locationImage.image = UIImage(data: imageData)

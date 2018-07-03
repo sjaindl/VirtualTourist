@@ -23,6 +23,7 @@
 		9A7A6B4720E2083500F32DC7 /* AlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7A6B4620E2083500F32DC7 /* AlbumCollectionViewCell.swift */; };
 		9A7A6B4920E545A600F32DC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A7A6B4820E545A500F32DC7 /* Assets.xcassets */; };
 		9A7A6B4B20EAA6BB00F32DC7 /* Photos+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7A6B4A20EAA6BB00F32DC7 /* Photos+Extensions.swift */; };
+		9AA4452E20EB3E9600A789E2 /* GenericListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA4452D20EB3E9600A789E2 /* GenericListDataSource.swift */; };
 		9ADE2CF720D41F3100268747 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADE2CF620D41F3100268747 /* Constants.swift */; };
 		9ADE2CF920D427E900268747 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9ADE2CF820D427E900268747 /* Info.plist */; };
 /* End PBXBuildFile section */
@@ -47,6 +48,7 @@
 		9A7A6B4620E2083500F32DC7 /* AlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		9A7A6B4820E545A500F32DC7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A7A6B4A20EAA6BB00F32DC7 /* Photos+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photos+Extensions.swift"; sourceTree = "<group>"; };
+		9AA4452D20EB3E9600A789E2 /* GenericListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericListDataSource.swift; sourceTree = "<group>"; };
 		9ADE2CF620D41F3100268747 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9ADE2CF820D427E900268747 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,6 +139,7 @@
 		9A3FA7CD20D419ED00FCD3A0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				9AA4452D20EB3E9600A789E2 /* GenericListDataSource.swift */,
 				9A3FA7C920D419D400FCD3A0 /* TravelLocationsMapViewController.swift */,
 				9A36027020D70F9A0000F0B3 /* AlbumViewController.swift */,
 			);
@@ -284,6 +287,7 @@
 				9A36027B20D800060000F0B3 /* FlickrConstants.swift in Sources */,
 				9A36027520D7FFF70000F0B3 /* WebConstants.swift in Sources */,
 				9A1285E220D4163100D2E9AA /* AppDelegate.swift in Sources */,
+				9AA4452E20EB3E9600A789E2 /* GenericListDataSource.swift in Sources */,
 				9A7A6B4B20EAA6BB00F32DC7 /* Photos+Extensions.swift in Sources */,
 				9A3FA7CA20D419D400FCD3A0 /* TravelLocationsMapViewController.swift in Sources */,
 				9ADE2CF720D41F3100268747 /* Constants.swift in Sources */,
