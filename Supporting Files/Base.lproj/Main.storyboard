@@ -74,7 +74,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="138" height="111"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pin" translatesAutoresizingMaskIntoConstraints="NO" id="dsd-3r-ioD">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pin" translatesAutoresizingMaskIntoConstraints="NO" id="dsd-3r-ioD">
                                                     <rect key="frame" x="38.5" y="25.5" width="60" height="60"/>
                                                 </imageView>
                                             </subviews>
