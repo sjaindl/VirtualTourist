@@ -11,14 +11,13 @@ import Foundation
 
 class DataController {
     let persistentContainer: NSPersistentContainer
-    let backgroundContext: NSManagedObjectContext
+    var backgroundContext: NSManagedObjectContext!
     var viewContext: NSManagedObjectContext {
         return persistentContainer.viewContext
     }
     
     init(modelName: String) {
         persistentContainer = NSPersistentContainer(name: modelName)
-        backgroundContext = persistentContainer.newBackgroundContext()
     }
     
     func load(completion: (() -> Void)? = nil) {
@@ -27,6 +26,9 @@ class DataController {
                 print("\(error!.localizedDescription)")
                 return
             }
+            
+            self.backgroundContext = self.persistentContainer.newBackgroundContext()
+            
             self.configureContexts()
             completion?()
         }

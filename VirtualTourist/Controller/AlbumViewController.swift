@@ -15,6 +15,7 @@ class AlbumViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var pin: Pin!
     var dataController: DataController!
@@ -31,8 +32,9 @@ class AlbumViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(deleteCheckedPhotos))
+        navigationItem.rightBarButtonItem?.isEnabled = false
         
-        initCamera()
+        initMap()
         initResultsController()
         fetchData()
     }
@@ -61,8 +63,10 @@ class AlbumViewController: UIViewController {
         }
         
         itemsToDelete.removeAll()
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        
         resetAlpha()
-        collectionView.reloadData()
+//        collectionView.reloadData()
     }
     
     func setupFlowLayout() {
@@ -144,19 +148,22 @@ class AlbumViewController: UIViewController {
                         for photo in photos {
                             self.persistPhoto(photo: photo)
                         }
+                        self.enableUi(true)
                     }
                 }
             }
         }
     }
     
-    func initCamera() {
+    func initMap() {
         let zoom = UserDefaults.standard.float(forKey: Constants.UserDefaults.USER_DEFAULT_ZOOM_LEVEL)
         let camera = GMSCameraPosition.camera(withLatitude: pin.latitude,
                                               longitude: pin.longitude,
                                               zoom: zoom)
         
         map.camera = camera
+        
+        addPinToMap(with: CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude))
     }
     
     func persistPhoto(photo: [String: AnyObject]) {
@@ -169,11 +176,18 @@ class AlbumViewController: UIViewController {
             photo.pin = self.pin
             photo.title = title
             photo.imageUrl = imageUrlString
-            if let url = URL(string: imageUrlString) {
-                try? photo.imageData = Data(contentsOf: url)
-            }
             
-            try? self.dataController.save()
+            try? dataController.save()
+            
+            let photoId = photo.objectID
+            
+            if let url = URL(string: imageUrlString), let backgroundContext:NSManagedObjectContext = dataController?.backgroundContext {
+                backgroundContext.perform {
+                    let backgroundPhoto = backgroundContext.object(with: photoId) as! Photos
+                    try? backgroundPhoto.imageData = Data(contentsOf: url)
+                    try? backgroundContext.save()
+                }
+            }
         }
     }
     
@@ -192,10 +206,18 @@ class AlbumViewController: UIViewController {
         resetAlpha()
         collectionView.reloadData()
         enableUi(true)
+        navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     func enableUi(_ enable: Bool) {
         newCollectionButton.isEnabled = enable
+        navigationItem.rightBarButtonItem?.isEnabled = enable && itemsToDelete.count > 0
+        
+        if enable {
+            activityIndicator.stopAnimating()
+        } else {
+            activityIndicator.startAnimating()
+        }
     }
     
     func setAlphaValue(at indexPath: IndexPath, to alpha: Double) {
@@ -210,6 +232,12 @@ class AlbumViewController: UIViewController {
         for row in 0 ... count {
             setAlphaValue(at: IndexPath(row: row, section: 0), to: 1.0)
         }
+    }
+    
+    func addPinToMap(with coordinate: CLLocationCoordinate2D) {
+        let position = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let marker = GMSMarker(position: position)
+        marker.map = map
     }
 }
 
@@ -264,16 +292,16 @@ extension AlbumViewController : UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.ALBUM_CELL_REUSE_ID, for: indexPath) as! AlbumCollectionViewCell
-        setAlphaValue(at: indexPath, to: 1.0)
-        print("\(indexPath): \(cell.alpha)")
+        
+        cell.locationImage.image = UIImage(named: Constants.CoreData.PLACEHOLDER_IMAGE)
         
         if let imageData = fetchedResultsController.object(at: indexPath).imageData {
             cell.locationImage.image = UIImage(data: imageData)
         } else {
             cell.locationImage.image = UIImage(named: Constants.CoreData.PLACEHOLDER_IMAGE)
-            
+
             if let imagePath = fetchedResultsController.object(at: indexPath).imageUrl, let imageUrl = URL(string: imagePath), let imageData = try? Data(contentsOf: imageUrl) {
-                
+
                 DispatchQueue.main.async {
                     cell.locationImage.image = UIImage(data: imageData)
                 }
@@ -295,5 +323,6 @@ extension AlbumViewController : UICollectionViewDelegate, UICollectionViewDataSo
             setAlphaValue(at: itemIndexPath, to: 0.5)
         }
         
+        navigationItem.rightBarButtonItem?.isEnabled = itemsToDelete.count > 0
     }
 }

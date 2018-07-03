@@ -17,6 +17,7 @@ class TravelLocationsMapViewController: UIViewController {
     
     var dataController: DataController!
     var fetchedResultsController: NSFetchedResultsController<Pin>!
+    var deleteMode = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,18 @@ class TravelLocationsMapViewController: UIViewController {
         initCamera()
         initResultsController()
         fetchData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(setDeleteMode))
+    }
+    
+    @objc
+    func setDeleteMode() {
+        deleteMode = !deleteMode
+        navigationItem.rightBarButtonItem?.title = deleteMode ? "Tap pin to delete" : "Delete"
     }
     
     func initResultsController() {
@@ -51,13 +64,8 @@ class TravelLocationsMapViewController: UIViewController {
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
     }
-    
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
         if segue.identifier == Constants.ALBUM_SEGUE_ID {
             let controller = segue.destination as! AlbumViewController
             controller.pin = sender as! Pin
@@ -114,9 +122,22 @@ extension TravelLocationsMapViewController: GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        performSegue(withIdentifier: Constants.ALBUM_SEGUE_ID, sender: marker.userData)
+        if deleteMode {
+            if let pin = marker.userData as? Pin, let index = fetchedResultsController.indexPath(forObject: pin) {
+                let object = fetchedResultsController.object(at: index)
+                dataController.viewContext.delete(object)
+                try? dataController.save()
+            }
+            
+            marker.map = nil
+        } else {
+            performSegue(withIdentifier: Constants.ALBUM_SEGUE_ID, sender: marker.userData)
+        }
+        
         return true
     }
+    
+    
 }
 
 extension TravelLocationsMapViewController: NSFetchedResultsControllerDelegate {
