@@ -46,7 +46,6 @@ class TravelLocationsMapViewController: UIViewController {
         let sortDescriptor = NSSortDescriptor(key: Constants.CoreData.SORT_KEY, ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: Constants.CoreData.CACHE_NAME_PINS)
-        fetchedResultsController.delegate = self
     }
     
     func fetchData() {
@@ -136,10 +135,4 @@ extension TravelLocationsMapViewController: GMSMapViewDelegate {
         
         return true
     }
-    
-    
-}
-
-extension TravelLocationsMapViewController: NSFetchedResultsControllerDelegate {
-    
 }

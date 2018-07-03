@@ -24,10 +24,6 @@ struct Constants {
         static let PHOTO_LIMIT = 18
     }
     
-    
-    
-//    static let PIN_ID = "pinId"
-    
     struct UserDefaults {
         static let USER_DEFAULT_LAUNCHED_BEFORE = "hasLaunchedBefore"
         static let USER_DEFAULT_MAP_LATITUDE = "mapLatitude"
