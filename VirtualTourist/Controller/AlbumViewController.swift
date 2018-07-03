@@ -16,6 +16,7 @@ class AlbumViewController: UIViewController {
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var noPhotoLabel: UILabel!
     
     var pin: Pin!
     var dataController: DataController!
@@ -46,6 +47,7 @@ class AlbumViewController: UIViewController {
     
     @IBAction func fetchNewCollection(_ sender: Any) {
         enableUi(false)
+        self.noPhotoLabel.isHidden = true
         
         deletePhotos()
         fetchDataFromFlickr()
@@ -98,6 +100,8 @@ class AlbumViewController: UIViewController {
     func fetchData() {
         enableUi(false)
         
+        self.noPhotoLabel.isHidden = true
+        
         do {
             try dataSource.performFetch()
             if let result = dataSource.fetchedObjects() {
@@ -136,16 +140,17 @@ class AlbumViewController: UIViewController {
                     self.showError(error)
                     self.enableUi(true)
                 } else {
-                    guard let photos = photos else {
-                        self.showError("No photos have been found!")
-                        self.enableUi(true)
-                        return
-                    }
-                    
                     DispatchQueue.main.async {
+                        guard let photos = photos else {
+                            self.noPhotoLabel.isHidden = false
+                            self.enableUi(true)
+                            return
+                        }
+                    
                         for photo in photos {
                             self.persistPhoto(photo: photo)
                         }
+                        
                         self.enableUi(true)
                     }
                 }

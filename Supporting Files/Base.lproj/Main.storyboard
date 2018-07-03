@@ -104,11 +104,19 @@
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="mCM-e7-7Mv">
                                 <rect key="frame" x="177" y="323" width="20" height="20"/>
                             </activityIndicatorView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No photos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ggm-QA-uz9">
+                                <rect key="frame" x="147.5" y="323" width="80" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="jmY-Z5-gC5" firstAttribute="top" secondItem="NE5-yi-qhZ" secondAttribute="bottom" id="0DZ-vo-dlL"/>
+                            <constraint firstItem="Ggm-QA-uz9" firstAttribute="centerX" secondItem="mpI-P7-S08" secondAttribute="centerX" id="9mS-sO-ZcK"/>
                             <constraint firstItem="3jZ-Ay-qs3" firstAttribute="leading" secondItem="XNr-bh-ZxB" secondAttribute="leading" id="D0y-9o-F8b"/>
+                            <constraint firstItem="Ggm-QA-uz9" firstAttribute="centerY" secondItem="mpI-P7-S08" secondAttribute="centerY" id="Ddh-Ub-TOX"/>
                             <constraint firstItem="XNr-bh-ZxB" firstAttribute="trailing" secondItem="3jZ-Ay-qs3" secondAttribute="trailing" id="KDh-qa-yEK"/>
                             <constraint firstItem="mCM-e7-7Mv" firstAttribute="centerY" secondItem="mpI-P7-S08" secondAttribute="centerY" id="LNQ-gh-ftR"/>
                             <constraint firstItem="XNr-bh-ZxB" firstAttribute="trailing" secondItem="NE5-yi-qhZ" secondAttribute="trailing" id="M6w-6A-goz"/>
@@ -128,6 +136,7 @@
                         <outlet property="flowLayout" destination="jdt-g2-BwF" id="w1N-pn-XDK"/>
                         <outlet property="map" destination="NE5-yi-qhZ" id="oek-oL-jvc"/>
                         <outlet property="newCollectionButton" destination="3jZ-Ay-qs3" id="wgL-dL-tDp"/>
+                        <outlet property="noPhotoLabel" destination="Ggm-QA-uz9" id="ENG-lJ-A9E"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bg8-PH-yLO" userLabel="First Responder" sceneMemberID="firstResponder"/>
