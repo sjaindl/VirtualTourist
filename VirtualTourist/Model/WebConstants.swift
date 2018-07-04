@@ -1,6 +1,6 @@
 //
 //  WebConstants.swift
-//  OnTheMap
+//  VirtualTourist
 //
 //  Created by Stefan Jaindl on 24.05.18.
 //  Copyright © 2018 Stefan Jaindl. All rights reserved.

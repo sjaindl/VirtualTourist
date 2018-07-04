@@ -1,6 +1,6 @@
 //
 //  ParseConstants.swift
-//  OnTheMap
+//  VirtualTourist
 //
 //  Created by Stefan Jaindl on 23.05.18.
 //  Copyright © 2018 Stefan Jaindl. All rights reserved.
@@ -50,10 +50,13 @@ struct FlickrConstants {
         static let Title = "title"
         static let ImageSize = "url_l"
         static let Pages = "pages"
+        static let PerPage = "perpage"
         static let Total = "total"
     }
 
     struct ParameterKeys {
         static let RESULTS = "results"
     }
+    
+    static let MAX_NUMBER_PHOTOS = 4000
 }

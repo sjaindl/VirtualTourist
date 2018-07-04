@@ -1,6 +1,6 @@
 //
 //  ParseClient.swift
-//  OnTheMap
+//  VirtualTourist
 //
 //  Created by Stefan Jaindl on 23.05.18.
 //  Copyright © 2018 Stefan Jaindl. All rights reserved.
@@ -83,10 +83,10 @@ class FlickrClient {
             } else {
                 /* GUARD: Is "photos" key in our result? */
                 
-                if let photosDictionary = results?[FlickrConstants.FlickrResponseKeys.Photos] as? [String:AnyObject], let photosArray = photosDictionary[FlickrConstants.FlickrResponseKeys.Photo] as? [[String: AnyObject]], let totalPages = photosDictionary[FlickrConstants.FlickrResponseKeys.Pages] as? Int {
+                if let photosDictionary = results?[FlickrConstants.FlickrResponseKeys.Photos] as? [String:AnyObject], let photosArray = photosDictionary[FlickrConstants.FlickrResponseKeys.Photo] as? [[String: AnyObject]], let totalPages = photosDictionary[FlickrConstants.FlickrResponseKeys.Pages] as? Int, let perPage = photosDictionary[FlickrConstants.FlickrResponseKeys.PerPage] as? Int {
                     
                     // pick a random page!
-                    let pageLimit = min(totalPages, 40)
+                    let pageLimit = min(totalPages, FlickrConstants.MAX_NUMBER_PHOTOS / perPage)
                     let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
                     
                     completionHandler(nil, randomPage, photosArray)
@@ -96,6 +96,24 @@ class FlickrClient {
                 }
             }
         }
+    }
+    
+    func downloadImage( imagePath:String, completionHandler: @escaping (_ imageData: Data?, _ errorString: String?) -> Void){
+        let session = URLSession.shared
+        let imgURL = NSURL(string: imagePath)
+        let request: NSURLRequest = NSURLRequest(url: imgURL! as URL)
+        
+        let task = session.dataTask(with: request as URLRequest) {data, response, downloadError in
+            
+            if downloadError != nil {
+                completionHandler(nil, "Could not download image \(imagePath)")
+            } else {
+                
+                completionHandler(data, nil)
+            }
+        }
+        
+        task.resume()
     }
     
     private func buildRequest(withUrl url: URL, withHttpMethod httpMethod: String) -> URLRequest {

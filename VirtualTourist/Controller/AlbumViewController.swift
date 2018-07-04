@@ -55,7 +55,7 @@ class AlbumViewController: UIViewController {
     
     func deletePhotos() {
         guard let fetchedObjects = dataSource.fetchedObjects() else {
-            print("no fetched objects to delete!")
+            debugPrint("no fetched objects to delete!")
             return
         }
         
@@ -264,10 +264,21 @@ extension AlbumViewController : UICollectionViewDelegate, UICollectionViewDataSo
         } else {
             cell.locationImage.image = UIImage(named: Constants.CoreData.PLACEHOLDER_IMAGE)
 
-            if let imagePath = dataSource.object(at: indexPath).imageUrl, let imageUrl = URL(string: imagePath), let imageData = try? Data(contentsOf: imageUrl) {
-
-                DispatchQueue.main.async {
-                    cell.locationImage.image = UIImage(data: imageData)
+            if let imagePath = dataSource.object(at: indexPath).imageUrl {
+                
+                FlickrClient.sharedInstance.downloadImage(imagePath: imagePath) { (imageData, error) in
+                    if let error = error {
+                        self.showError(error)
+                    } else {
+                        guard let imageData = imageData else {
+                            self.showError("Could not download image")
+                            return
+                        }
+                        
+                        DispatchQueue.main.async {
+                            cell.locationImage.image = UIImage(data: imageData)
+                        }
+                    }
                 }
             }
         }

@@ -22,8 +22,6 @@ class TravelLocationsMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        map.delegate = self
-        
         initCamera()
         initResultsController()
         fetchData()
